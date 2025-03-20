@@ -64,10 +64,11 @@ public class Autocorrect {
      */
     public String[] runTest(String typed) {
         ArrayList<Unit> groups = new ArrayList<Unit>();
-        for(int i = 0; i < dict.length; i++){
-            int dist = editDist(typed, dict[i]);
+        String[] shortList = makeShortList(dict, typed);
+        for(int i = 0; i < shortList.length; i++){
+            int dist = editDist(typed, shortList[i]);
             if (dist <= thres){
-                groups.add(new Unit(dict[i], dist));
+                groups.add(new Unit(shortList[i], dist));
             }
         }
 
@@ -86,42 +87,49 @@ public class Autocorrect {
 
     // Return a shortlist of dictionary words to check, based on n grams
     public String[] makeShortList(String[] dict, String typed){
-        // Create n-grams
-        ArrayList<String> typeGrams = new ArrayList<String>();
-        for (int i = 0; i < typed.length() - 1; i++){
-            String gram = "" + typed.charAt(i) + typed.charAt(i+1);
-            typeGrams.add(gram);
-        }
+        ArrayList<String> shortList = new ArrayList<String>();
+
         for (int i = 0; i < dict.length; i++){
-
+            if (isGoodWord(dict[i], typed)){
+                shortList.add(dict[i]);
+            }
         }
-
-
+        String[] array = new String[shortList.size()];
+        for (int i = 0; i < shortList.size(); i++){
+            array[i] = shortList.get(i);
+        }
+        return array;
     }
 
     // Returns all n grams for a word
     public ArrayList<String> makeNGram(String word){
-
+        // Create n-grams
+        ArrayList<String> grams = new ArrayList<String>();
+        for (int i = 0; i < word.length() - 1; i++){
+            String gram = "" + word.charAt(i) + word.charAt(i+1);
+            grams.add(gram);
+        }
+        return grams;
     }
 
     public Boolean isGoodWord(String dictWord, String typed){
         ArrayList<String> dictgrams = makeNGram(dictWord);
         ArrayList<String> typedgrams = makeNGram(typed);
 
-
-        for (String gram  ){
-
+        int overlap = 0;
+        // Overlap = # of shared n-grams
+        for (String gram : typedgrams){
+            if (dictgrams.contains(gram)){
+                overlap++;
+            }
         }
         // Represents the number of n grams that must match for a good word
         int thres = Math.min(dictgrams.size(), typedgrams.size()) / 2;
         int similarity = (20 * overlap) / (dictgrams.size() + typedgrams.size());
-
-
-
-
         if (similarity >= thres){
             return true;
         }
+        return false;
     }
 
 

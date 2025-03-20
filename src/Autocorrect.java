@@ -1,6 +1,9 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * Autocorrect
@@ -10,6 +13,7 @@ import java.io.IOException;
  * @author Zach Blick
  * @author KATE LITTLE
  */
+
 public class Autocorrect {
 
     /**
@@ -17,35 +21,39 @@ public class Autocorrect {
      * @param words The dictionary of acceptable words.
      * @param threshold The maximum number of edits a suggestion can have.
      */
+    String[] dict;
+    int thres;
     public Autocorrect(String[] words, int threshold) {
-        int[] dist
-        for (String word: words){
-
-        }
-
+        this.dict = words;
+        this.thres = threshold;
     }
 
     public static int editDist(String a, String b){
-        int[][] editDist = new int[a.length()][b.length()];
+        int[][] editDist = new int[a.length() + 1][b.length() + 1];
+
+        // Set values for when either string has length 0:
+        // If the length of either string is 0, edit distance = length of other string
+        for (int i = 0; i < a.length() + 1; i++){
+            editDist[i][0] = i;
+        }
+        for (int i = 0; i < b.length() + 1; i++){
+            editDist[0][i] = i;
+        }
 
         // Tabulation Approach
-        for (int i = 0; i < a.length(); i++){
-            for (int j = 0; j < b.length(); j++){
-                // Base cases — if the length of either string is 0, edit distance = length of other string
-                if (i == 0){
-                    editDist[i][j] = j;
-                }
-                if (j == 0){
-                    editDist[i][j] = i;
-                }
-                if (a.charAt(i) == b.charAt(j)){
+        for (int i = 1; i < a.length() + 1; i++){
+            for (int j = 1; j < b.length() + 1; j++){
+                // If words share same ending, edit dist = diagonal + 1
+                if (a.charAt(i - 1) == b.charAt(j - 1)){
                     editDist[i][j] = editDist[i - 1][j - 1];
                 }
+                // Otherwise, edit distance = the minimum of up, left, and diagonal up/left
                 else{
                     editDist[i][j] = 1 + Math.min(Math.min(editDist[i - 1][j], editDist[i][j - 1]), editDist[i - 1][j - 1]);
                 }
             }
         }
+        return editDist[a.length()][b.length()];
     }
 
     /**
@@ -55,8 +63,65 @@ public class Autocorrect {
      * to threshold, sorted by edit distance, then sorted alphabetically.
      */
     public String[] runTest(String typed) {
+        ArrayList<Unit> groups = new ArrayList<Unit>();
+        for(int i = 0; i < dict.length; i++){
+            int dist = editDist(typed, dict[i]);
+            if (dist <= thres){
+                groups.add(new Unit(dict[i], dist));
+            }
+        }
 
-        return new String[0];
+        // Sort in ascending order, then alphabetically
+        groups.sort(Comparator.comparing(Unit::getDist).thenComparing(Unit::getWord));
+
+        String[] goodWords = new String[groups.size()];
+
+        for (int i = 0; i < groups.size(); i++){
+            goodWords[i] = groups.get(i).getWord();
+            System.out.println(goodWords[i] + " :" + groups.get(i).getDist());
+        }
+
+        return goodWords;
+    }
+
+    // Return a shortlist of dictionary words to check, based on n grams
+    public String[] makeShortList(String[] dict, String typed){
+        // Create n-grams
+        ArrayList<String> typeGrams = new ArrayList<String>();
+        for (int i = 0; i < typed.length() - 1; i++){
+            String gram = "" + typed.charAt(i) + typed.charAt(i+1);
+            typeGrams.add(gram);
+        }
+        for (int i = 0; i < dict.length; i++){
+
+        }
+
+
+    }
+
+    // Returns all n grams for a word
+    public ArrayList<String> makeNGram(String word){
+
+    }
+
+    public Boolean isGoodWord(String dictWord, String typed){
+        ArrayList<String> dictgrams = makeNGram(dictWord);
+        ArrayList<String> typedgrams = makeNGram(typed);
+
+
+        for (String gram  ){
+
+        }
+        // Represents the number of n grams that must match for a good word
+        int thres = Math.min(dictgrams.size(), typedgrams.size()) / 2;
+        int similarity = (20 * overlap) / (dictgrams.size() + typedgrams.size());
+
+
+
+
+        if (similarity >= thres){
+            return true;
+        }
     }
 
 

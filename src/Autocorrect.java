@@ -1,9 +1,11 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Scanner;
 
 /**
  * Autocorrect
@@ -63,6 +65,8 @@ public class Autocorrect {
      * to threshold, sorted by edit distance, then sorted alphabetically.
      */
     public String[] runTest(String typed) {
+
+        System.out.println("dict length: " + dict.length);
         ArrayList<Unit> groups = new ArrayList<Unit>();
         String[] shortList = makeShortList(dict, typed);
         for(int i = 0; i < shortList.length; i++){
@@ -98,6 +102,7 @@ public class Autocorrect {
         for (int i = 0; i < shortList.size(); i++){
             array[i] = shortList.get(i);
         }
+        System.out.println("short length: " + array.length);
         return array;
     }
 
@@ -125,7 +130,7 @@ public class Autocorrect {
         }
         // Represents the number of n grams that must match for a good word
         int thres = Math.min(dictgrams.size(), typedgrams.size()) / 2;
-        int similarity = (20 * overlap) / (dictgrams.size() + typedgrams.size());
+        int similarity = (20 * (overlap + 1)) / (dictgrams.size() + typedgrams.size());
         if (similarity >= thres){
             return true;
         }
@@ -157,5 +162,24 @@ public class Autocorrect {
         catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static void main(String[] args){
+        Scanner s = new Scanner(System.in);
+        System.out.println("Enter a word: ");
+        String typed = s.nextLine();
+        Autocorrect attempt = new Autocorrect();
+        if (dict.contains(typed)){
+
+        }
+        else{
+            if (array.length !=0){
+                System.out.println(array);
+            }
+            else{
+                System.out.println("No matches found.");
+            }
+        }
+
     }
 }

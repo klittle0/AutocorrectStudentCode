@@ -11,6 +11,7 @@ Name: KATE LITTLE
 | March 21 |    2:00-3:00    |                                                                                                     Liliana & I modified our n-gram test to be a little more lenient, so it didn't eliminate any words that would =< threshold. Now, it works for all test cases. |
 | March 23 |  12:30-1:15pm   |                                                             I started writing my main method so the user can work in the console. Right now, the interface is working decently, but for some reason, the words that are returned are each repeated like 10 times. |
 | March 23 |   1:30-2:00pm   | I realized that I was unnecessarily iterating through the shortlist, causing repeats in my final printing. I removed this & updated the style of my console to work correctly. I went through my code to improve documentation and efficiency anywhere I saw fit. |
+| March 23 |   3:00-3:45pm   |                                                                                                                                                                                       I calculated the time complexity for everything & completed my readme file. |
 
 
 To add a new row to the table, click into a cell and then hit shift-enter.

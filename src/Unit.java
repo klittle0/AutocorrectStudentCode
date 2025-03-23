@@ -2,6 +2,9 @@ public class Unit {
     private String word;
     private int dist;
 
+    // Constructs an instance of the unit class.
+    // One unit is like a tuple with a word and an associated edit distance
+    // The edit distance is calculated using the user's typed input
         public Unit(String dicWord, int editDistance){
             this.word = dicWord;
             this.dist = editDistance;
@@ -17,10 +20,6 @@ public class Unit {
 
     public int getDist() {
         return dist;
-    }
-
-    public void setDist(int dist) {
-        this.dist = dist;
     }
 
     @Override

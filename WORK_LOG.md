@@ -8,7 +8,9 @@ Name: KATE LITTLE
 | March 20 |   8:00-8:40am   | I finalized my object class, but none of the checks passed because I was calculating the edit distance incorrectly. I realized my tabulation approach wasn't adding/subtracting 1 at the right times, so I revised it. |
 | March 20 |    8:45-10am    | I brainstormed an n-gram solution will Liliana & started writing methods to make n grams, check whether a dictionary word was a good match for the typed word, and a method to make a shortlist of all possible words. |
 | March 20 |  10:00-10:40am  |                                                                                                                                I finished writing my methods to find n grams & create a short list for the dictionary. |
-| March 21 |    2:00-3:00    |                                                                                            Liliana & I modified our n-gram test to be a little more lenient, so it didn't eliminate any words that would =< threshold. |
+| March 21 |    2:00-3:00    |                                                          Liliana & I modified our n-gram test to be a little more lenient, so it didn't eliminate any words that would =< threshold. Now, it works for all test cases. |
+| March 23 |  12:30-1:15pm   |                  I started writing my main method so the user can work in the console. Right now, the interface is working decently, but for some reason, the words that are returned are each repeated like 10 times. |
+| March 23 |   1:30-2:00pm   |                                                                                                                                                                                                                        |
 
 
 To add a new row to the table, click into a cell and then hit shift-enter.

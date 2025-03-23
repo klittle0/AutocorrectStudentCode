@@ -30,6 +30,7 @@ public class Autocorrect {
         this.thres = threshold;
     }
 
+    // Returns the edit distance between 2 given strings
     public static int editDist(String a, String b){
         int[][] editDist = new int[a.length() + 1][b.length() + 1];
 
@@ -66,7 +67,6 @@ public class Autocorrect {
      */
     public String[] runTest(String typed) {
 
-        System.out.println("dict length: " + dict.length);
         ArrayList<Unit> groups = new ArrayList<Unit>();
         String[] shortList = makeShortList(dict, typed);
         for(int i = 0; i < shortList.length; i++){
@@ -75,15 +75,13 @@ public class Autocorrect {
                 groups.add(new Unit(shortList[i], dist));
             }
         }
-
         // Sort in ascending order, then alphabetically
         groups.sort(Comparator.comparing(Unit::getDist).thenComparing(Unit::getWord));
 
+        // Convert from arraylist to array
         String[] goodWords = new String[groups.size()];
-
         for (int i = 0; i < groups.size(); i++){
             goodWords[i] = groups.get(i).getWord();
-            System.out.println(goodWords[i] + " :" + groups.get(i).getDist());
         }
 
         return goodWords;
@@ -102,7 +100,6 @@ public class Autocorrect {
         for (int i = 0; i < shortList.size(); i++){
             array[i] = shortList.get(i);
         }
-        System.out.println("short length: " + array.length);
         return array;
     }
 
@@ -117,6 +114,7 @@ public class Autocorrect {
         return grams;
     }
 
+    // Returns true if a word should be considered in the dictionary shortlist
     public Boolean isGoodWord(String dictWord, String typed){
         ArrayList<String> dictgrams = makeNGram(dictWord);
         ArrayList<String> typedgrams = makeNGram(typed);
@@ -164,22 +162,39 @@ public class Autocorrect {
         }
     }
 
+    // Returns true if a word is found in a dictionary
+    // False otherwise
+    private static Boolean isInDict(String[] dictionary, String word){
+        for (int i = 0; i < dictionary.length; i++){
+            // If the input exists in dictionary, return true
+            if (dictionary[i].equals(word)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static void main(String[] args){
         Scanner s = new Scanner(System.in);
         System.out.println("Enter a word: ");
         String typed = s.nextLine();
-        Autocorrect attempt = new Autocorrect();
-        if (dict.contains(typed)){
-
-        }
-        else{
-            if (array.length !=0){
-                System.out.println(array);
+        int thres = 3;
+        Autocorrect attempt = new Autocorrect(loadDictionary("small"), thres);
+        String[] shortList = attempt.makeShortList(attempt.dict, typed);
+        for (int i = 0; i < shortList.length; i++){
+            // If the user input is NOT in dictionary
+            if (!isInDict(shortList, typed)){
+                String[] possibleWords = attempt.runTest(typed);
+                // If there are possible matches, print them out
+                if (possibleWords.length !=0){
+                    for (String word: possibleWords){
+                        System.out.println(word);
+                    }
+                }
+                else{
+                    System.out.println("No matches found.");
+                }
             }
-            else{
-                System.out.println("No matches found.");
-            }
         }
-
     }
 }
